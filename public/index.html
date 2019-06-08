@@ -30,10 +30,14 @@
   <div id="angular-root" ng-app="angularApp">
     <div ng-controller="MainController as ctrl">
       <button ng-click="ctrl.renderReact()">Render React!</button>
+      <div ng-if="ctrl.initialized">
+        Current count in NG is <span ng-bind="ctrl.count"> </span>
+        <button ng-click="ctrl.increment()">Increment from NG</button>
+      </div>
     </div>
   </div>
 
-  <div id="react-root" />
+  <div id="react-root"></div>
   <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
