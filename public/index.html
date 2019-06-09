@@ -29,7 +29,6 @@
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="angular-root" ng-app="angularApp">
     <div ng-controller="MainController as ctrl">
-      <button ng-click="ctrl.renderReact()">Render React!</button>
       <div ng-if="ctrl.initialized">
         Current count in NG is <span ng-bind="ctrl.count"> </span>
         <button ng-click="ctrl.increment()">Increment from NG</button>

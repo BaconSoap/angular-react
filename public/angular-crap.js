@@ -1,8 +1,22 @@
 const app = angular.module('angularApp', []);
 
+class ReactService {
+  constructor() {
+    console.log('constructing svc');
+    this.manager = new window.ReactAppManager();
+    this.manager.renderApp();
+    this.store = this.manager.store;
+  }
+}
+
+app.service('ReactService', ReactService);
+
 class MainController {
-  constructor($scope) {
-    this.initialized = false;
+  constructor($scope, ReactService) {
+    this.$scope = $scope;
+    this.ReactService = ReactService;
+
+    this.initialized = true;
     this.onStateChange = this.onStateChange.bind(this);
 
     $scope.$safeApply = function (fn) {
@@ -16,20 +30,12 @@ class MainController {
       }
     };
 
-    this.$scope = $scope;
-  }
-
-  renderReact() {
-    this.initialized = true;
-    this.store = window.renderApp();
-    this.store.subscribe(this.onStateChange);
-
-    console.log(this.store.getState());
-    this.count = this.store.getState().counter.count;
+    this.ReactService.store.subscribe(this.onStateChange);
+    this.count = this.ReactService.store.getState().counter.count;
   }
 
   onStateChange() {
-    const newState = this.store.getState();
+    const newState = this.ReactService.store.getState();
     console.log('New state: ', newState);
     if (this.count !== newState.counter.count) {
       this.$scope.$safeApply(() => {
@@ -39,10 +45,10 @@ class MainController {
   }
 
   increment() {
-    this.store.dispatch({ type: 'increment' });
+    this.ReactService.store.dispatch({ type: 'increment' });
   }
 }
 
-MainController.$inject = ['$scope'];
+MainController.$inject = ['$scope', 'ReactService'];
 
 app.controller('MainController', MainController);
